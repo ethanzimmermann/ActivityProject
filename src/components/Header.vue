@@ -8,10 +8,10 @@
     <template slot="end">
       <b-navbar-item tag="div">
         <div class="buttons">
-          <a class="button is-success is-light" @click="toggleFilters()">
+          <a class="button is-success is-light" @click="$emit('toggleFilters')">
             <strong>Filters</strong>
           </a>
-          <a class="button is-success is-light" @click="addActivity()">
+          <a class="button is-success is-light" @click="$emit('addActivity')">
             <strong>New Activity</strong>
           </a>
         </div>
@@ -23,13 +23,5 @@
 export default {
   name: "Header",
   setup() {},
-  methods: {
-    addActivity() {
-      this.$emit("addActivity", {});
-    },
-    openFilters() {
-      this.$emit("toggleFilters", {});
-    },
-  },
 };
 </script>

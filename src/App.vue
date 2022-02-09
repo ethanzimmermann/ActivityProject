@@ -1,6 +1,9 @@
 <template>
   <div id="app">
+    <!-- Header component - contains triggers for adding a random activity and toggling the filters view -->
     <Header @addActivity="addActivity" @toggleFilters="toggleFilters" />
+
+    <!-- Collapsible section containing all activities -->
     <b-collapse
       class="card"
       animation="slide"
@@ -37,6 +40,7 @@
               <p>Price Range: {{ activity.price }}</p>
             </div>
           </div>
+          <!-- Only display a link section if a link is present -->
           <div v-if="activity.link" class="columns">
             <div class="column">
               <p>
@@ -48,6 +52,8 @@
         </div>
       </div>
     </b-collapse>
+
+    <!-- Error text for when a filtered search returns no matches -->
     <b-message
       title="No Matches"
       :active="filterProps.showErrorText"
@@ -57,8 +63,10 @@
     >
       No activities match the selected filters
     </b-message>
+
+    <!-- The modal containing the filters form -->
     <b-modal
-      :active="isComponentModalActive"
+      :active="isFiltersModalActive"
       has-modal-card
       trap-focus
       :destroy-on-hide="false"
@@ -89,11 +97,12 @@ export default {
     FiltersModal,
   },
   setup() {
+    //Gets necessary fields and functions from activityFunctions.js
     const {
       isOpen,
       activities,
       filterProps,
-      isComponentModalActive,
+      isFiltersModalActive,
       addActivity,
       addFilteredActivity,
       toggleFilters,
@@ -103,7 +112,7 @@ export default {
       isOpen,
       activities,
       filterProps,
-      isComponentModalActive,
+      isFiltersModalActive,
       addActivity,
       toggleFilters,
       addFilteredActivity,

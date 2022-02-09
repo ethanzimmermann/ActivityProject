@@ -82,6 +82,7 @@
         </section>
         <footer class="modal-card-foot">
           <b-button label="Close" @click="$emit('close')" />
+          <!-- Only enable when at least one filter is selected -->
           <b-button
             label="Get Activity"
             type="is-success"

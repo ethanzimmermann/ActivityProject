@@ -2,9 +2,12 @@ import { computed, reactive, ref } from '@vue/composition-api';
 import axios from 'axios';
 
 export function activityMaintenance() {
-    const isComponentModalActive = new ref(false);
+    //Determines if the filters modal is active
+    const isFiltersModalActive = new ref(false);
+    //Determines the index of the activity that is currently open
     const isOpen = new ref(0);
 
+    //Stores the list of activities, as well as filter-related values
     const state = reactive({
         activities: [],
         filterProps: {
@@ -20,6 +23,7 @@ export function activityMaintenance() {
         }
     })
 
+    //Adds a random activity to the list
     function addActivity() {
         axios.get("http://www.boredapi.com/api/activity", {}
         ).then(response => {
@@ -29,18 +33,24 @@ export function activityMaintenance() {
         })
     }
 
+    //Adds a filtered activity to the list
     function addFilteredActivity(filters) {
         var query = "?";
+        //Adds the type filter if selected
         if (filters.useTypeFilter) {
             query += "type=" + filters.typeFilter;
         }
+        //Adds the participant filter if selected
         if (filters.useParticipantFilter) {
+            //Add appropriate logic to query when necessary
             if (query != "?") {
                 query += "&"
             }
             query += "participants=" + filters.participantFilter;
         }
+        //Adds the price range filter when selected
         if (filters.usePriceFilter) {
+            //Add appropriate logic to query when necessary
             if (query != "?") {
                 query += "&"
             }
@@ -56,7 +66,9 @@ export function activityMaintenance() {
             }
             query += "minprice=" + minPrice + "&maxprice=" + maxPrice;
         }
+        //Adds accessiblity range filter when selected
         if (filters.useAccessibilityFilter) {
+            //Add appropriate logic to query when necessary
             if (query != "?") {
                 query += "&"
             }
@@ -72,9 +84,11 @@ export function activityMaintenance() {
             }
             query += "minaccessibility=" + minAccessibility + "&maxaccessibility=" + maxAccessibility;
         }
+        //Only run the query if it has been populated
         if (query != "?") {
             axios.get("http://www.boredapi.com/api/activity" + query, {}
             ).then(response => {
+                //Display error text when no matches are returned
                 if (response.data.error) {
                     state.filterProps.showErrorText = true;
                 }
@@ -83,18 +97,19 @@ export function activityMaintenance() {
                     state.activities.push(response.data)
                     isOpen.value = state.activities.length - 1;
                 }
-                isComponentModalActive.value = false;
+                isFiltersModalActive.value = false;
             })
         }
     }
 
+    //Toggles the filters modal
     function toggleFilters() {
-        isComponentModalActive.value = !isComponentModalActive.value;
+        isFiltersModalActive.value = !isFiltersModalActive.value;
     }
 
     return {
         isOpen,
-        isComponentModalActive,
+        isFiltersModalActive,
         activities: computed(() => state.activities),
         filterProps: state.filterProps,
         addFilteredActivity,
